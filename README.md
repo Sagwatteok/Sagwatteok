@@ -34,9 +34,9 @@
 <h2 align="center">📊 GitHub Activity</h2>
 
 <p align="center">
-  <a href="https://github.com/Sagwatteok"><img src="./assets/github-statistics.svg?v=uniform-titles" width="47%" align="top" alt="Eunji Kim’s GitHub Statistics" /></a>
+  <a href="https://github.com/Sagwatteok"><img src="https://raw.githubusercontent.com/Sagwatteok/Sagwatteok/main/assets/github-statistics.svg?v=matching-h2" width="47%" align="top" alt="Eunji Kim’s GitHub Statistics" /></a>
   &nbsp;
-  <a href="https://github.com/Sagwatteok?tab=repositories"><img src="./assets/github-languages.svg?v=uniform-titles" width="47%" align="top" alt="Eunji Kim’s Most Used Languages" /></a>
+  <a href="https://github.com/Sagwatteok?tab=repositories"><img src="https://raw.githubusercontent.com/Sagwatteok/Sagwatteok/main/assets/github-languages.svg?v=matching-h2" width="47%" align="top" alt="Eunji Kim’s Most Used Languages" /></a>
 </p>
 
 <br />
