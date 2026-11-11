@@ -33,8 +33,8 @@ h2 {
   line-height: 24px;
   font-size: 16px;
   font-weight: 600;
-  color: #86729F;
-  fill: #86729F;
+  color: #A18ABB;
+  fill: #A18ABB;
 }
 
 td {
