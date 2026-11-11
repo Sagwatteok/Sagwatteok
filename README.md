@@ -39,6 +39,4 @@
   <a href="https://github.com/Sagwatteok?tab=repositories"><img src="./assets/github-languages.svg?v=lavender" width="47%" align="top" alt="Eunji Kim’s Most Used Languages" /></a>
 </p>
 
-<p align="center"><sub>공개 저장소 기준 · 매일 자동 갱신</sub></p>
-
 <br />
