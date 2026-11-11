@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="260" viewBox="0 0 1200 260" role="img" aria-labelledby="title desc">
+  <title id="title">Hi, I'm Eunji Kim</title>
+  <desc id="desc">Backend Development · Project Management</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f0eaff"/>
+      <stop offset="0.55" stop-color="#f5f1ff"/>
+      <stop offset="1" stop-color="#edf6fa"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#9b86ce"/>
+      <stop offset="1" stop-color="#718fbd"/>
+    </linearGradient>
+  </defs>
+  <rect x="1" y="1" width="1198" height="258" rx="24" fill="url(#background)" stroke="#e7e0f3"/>
+  <g fill="none" stroke="#c7bcdf" stroke-width="1.5" opacity="0.5">
+    <circle cx="1100" cy="130" r="155"/>
+    <circle cx="1100" cy="130" r="112"/>
+    <path d="M873 176 L958 95 L1055 151 L1139 73"/>
+  </g>
+  <g fill="#f8f6ff" stroke="#b8a9d4" stroke-width="1.5">
+    <rect x="856" y="159" width="34" height="34" rx="10"/>
+    <rect x="941" y="78" width="34" height="34" rx="10"/>
+    <rect x="1038" y="134" width="34" height="34" rx="10"/>
+    <rect x="1122" y="56" width="34" height="34" rx="10"/>
+  </g>
+  <circle cx="873" cy="176" r="5" fill="url(#accent)"/>
+  <circle cx="958" cy="95" r="5" fill="url(#accent)"/>
+  <circle cx="1055" cy="151" r="5" fill="url(#accent)"/>
+  <circle cx="1139" cy="73" r="5" fill="url(#accent)"/>
+  <g font-family="Segoe UI, Helvetica, Arial, sans-serif">
+    <text x="72" y="72" font-size="20" fill="#75648c">Hi, I'm</text>
+    <text x="68" y="138" font-size="60" font-weight="700" letter-spacing="-2" fill="#322843">Eunji Kim</text>
+    <rect x="72" y="164" width="30" height="3" rx="1.5" fill="#9680be"/>
+    <text x="72" y="204" font-size="20" fill="#605273">Backend Development · Project Management</text>
+  </g>
+</svg>
