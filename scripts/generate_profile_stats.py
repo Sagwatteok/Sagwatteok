@@ -1,9 +1,11 @@
-"""Generate public GitHub statistics. No private repository data is published.
+"""Generate aggregate GitHub statistics; never publish repository names or code.
 
 Counts commits authored by the profile owner in the default-branch histories
-of public owned/contributed repositories. Identical commit SHAs are counted
+of accessible owned/contributed repositories. Private repositories are included
+only when INCLUDE_PRIVATE is enabled with a separately scoped read token.
+Identical commit SHAs are counted
 once. Lines changed are additions + deletions, excluding merge commits.
-Stars are received by owned, non-fork public repositories.
+Stars are received by owned, non-fork repositories.
 """
 
 import html
@@ -31,7 +33,7 @@ def graphql(query, **variables):
             with urllib.request.urlopen(request, timeout=90) as response:
                 result = json.load(response)
             if result.get("errors"):
-                raise RuntimeError("GitHub GraphQL query failed: " + json.dumps(result["errors"]))
+                raise RuntimeError("GitHub GraphQL query failed; details withheld to avoid exposing private repository information")
             return result["data"]
         except urllib.error.HTTPError as error:
             if error.code not in (429, 500, 502, 503, 504) or attempt == 2:
@@ -40,17 +42,18 @@ def graphql(query, **variables):
     raise RuntimeError("GitHub API retries exhausted")
 
 
-def collect(login):
+def collect(login, include_private=False):
     profile = graphql("query($login:String!){user(login:$login){id}}", login=login)["user"]
     repositories = {}
     stars = 0
     languages = {}
+    private_repository_count = 0
     for contributed in (False, True):
         cursor = None
         connection = (
             "repositoriesContributedTo(first:100,after:$cursor,includeUserRepositories:true,contributionTypes:[COMMIT])"
             if contributed else
-            "repositories(first:100,after:$cursor,privacy:PUBLIC,ownerAffiliations:[OWNER],isFork:false)"
+            "repositories(first:100,after:$cursor," + ("" if include_private else "privacy:PUBLIC,") + "ownerAffiliations:[OWNER],isFork:false)"
         )
         query = """query($login:String!,$cursor:String){user(login:$login){
           CONNECTION {nodes{nameWithOwner isPrivate isFork stargazerCount
@@ -60,7 +63,7 @@ def collect(login):
             user = graphql(query, login=login, cursor=cursor)["user"]
             page = user["repositoriesContributedTo" if contributed else "repositories"]
             for repo in page["nodes"]:
-                if repo["isPrivate"]:
+                if repo["isPrivate"] and not include_private:
                     continue
                 if not contributed:
                     stars += repo["stargazerCount"]
@@ -86,6 +89,7 @@ def collect(login):
     lines = 0
     active_repositories = 0
     for full_name in sorted(repositories):
+        private_repository_count += int(repositories[full_name]["isPrivate"])
         owner, name = full_name.split("/", 1)
         cursor = None
         has_commits = False
@@ -105,7 +109,8 @@ def collect(login):
             cursor = page["pageInfo"]["endCursor"]
         active_repositories += int(has_commits)
     return {"stars": stars, "commits": len(seen), "lines_changed": lines,
-            "repositories_with_contributions": active_repositories, "languages": languages}
+            "repositories_with_contributions": active_repositories, "languages": languages,
+            "private_repositories_included": private_repository_count}
 
 
 def render(stats):
@@ -142,13 +147,14 @@ def render_languages(stats):
             + '<span class="lang">{}</span><span class="percent">{:.2f}%</span></li>'.format(html.escape(name), proportion)
         )
     if not languages:
-        legend.append('<li style="transform:none;"><span class="lang">No public language data yet</span></li>')
+        legend.append('<li style="transform:none;"><span class="lang">No language data yet</span></li>')
     return template.replace("{{ progress }}", "".join(progress)).replace("{{ lang_list }}", "\n".join(legend))
 
 
 if __name__ == "__main__":
     owner = os.environ.get("PROFILE_OWNER", "Sagwatteok")
-    data = collect(owner)
+    include_private = os.environ.get("INCLUDE_PRIVATE", "false").lower() == "true"
+    data = collect(owner, include_private=include_private)
     output = Path(__file__).resolve().parents[1] / "assets" / "github-statistics.svg"
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(render(data), encoding="utf-8")

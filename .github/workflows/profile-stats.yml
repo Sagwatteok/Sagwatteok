@@ -24,9 +24,10 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
-      - name: Generate public statistics
+      - name: Generate profile statistics
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.PROFILE_STATS_TOKEN || github.token }}
+          INCLUDE_PRIVATE: ${{ secrets.PROFILE_STATS_TOKEN != '' }}
           PROFILE_OWNER: ${{ github.repository_owner }}
         run: python3 scripts/generate_profile_stats.py
       - name: Commit updated card
