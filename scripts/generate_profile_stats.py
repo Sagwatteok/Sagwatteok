@@ -44,6 +44,7 @@ def collect(login):
     profile = graphql("query($login:String!){user(login:$login){id}}", login=login)["user"]
     repositories = {}
     stars = 0
+    languages = {}
     for contributed in (False, True):
         cursor = None
         connection = (
@@ -53,7 +54,7 @@ def collect(login):
         )
         query = """query($login:String!,$cursor:String){user(login:$login){
           CONNECTION {nodes{nameWithOwner isPrivate isFork stargazerCount
-            defaultBranchRef{name}} pageInfo{hasNextPage endCursor}}
+            defaultBranchRef{name} languages(first:100,orderBy:{field:SIZE,direction:DESC}){edges{size node{name color}}}} pageInfo{hasNextPage endCursor}}
         }}""".replace("CONNECTION", connection)
         while True:
             user = graphql(query, login=login, cursor=cursor)["user"]
@@ -63,6 +64,10 @@ def collect(login):
                     continue
                 if not contributed:
                     stars += repo["stargazerCount"]
+                    for edge in repo["languages"]["edges"]:
+                        lang = edge["node"]["name"]
+                        item = languages.setdefault(lang, {"size": 0, "color": edge["node"]["color"]})
+                        item["size"] += edge["size"]
                 if repo["defaultBranchRef"]:
                     repositories[repo["nameWithOwner"]] = repo
             if not page["pageInfo"]["hasNextPage"]:
@@ -100,48 +105,45 @@ def collect(login):
             cursor = page["pageInfo"]["endCursor"]
         active_repositories += int(has_commits)
     return {"stars": stars, "commits": len(seen), "lines_changed": lines,
-            "repositories_with_contributions": active_repositories}
+            "repositories_with_contributions": active_repositories, "languages": languages}
 
 
 def render(stats):
-    rows = [
-        ("star", "Stars Earned", stats["stars"]),
-        ("commit", "Total Commits", stats["commits"]),
-        ("code", "Lines of Code Changed", stats["lines_changed"]),
-        ("repo", "Repositories with Contributions", stats["repositories_with_contributions"]),
-    ]
-    icons = {
-        "star": '<path d="m8 1 2.1 4.3 4.7.7-3.4 3.3.8 4.7L8 11.8 3.8 14l.8-4.7L1.2 6l4.7-.7Z"/>',
-        "commit": '<circle cx="8" cy="8" r="3"/><path d="M0 8h5m6 0h5"/>',
-        "code": '<path d="m5 4-4 4 4 4m6-8 4 4-4 4M9.5 2l-3 12"/>',
-        "repo": '<rect x="3" y="1.5" width="11" height="13" rx="1.5"/><path d="M3 11h11M6 4h5M6 7h3"/>',
+    template_dir = Path(__file__).resolve().parent / "stats-templates"
+    output = (template_dir / "overview.svg").read_text(encoding="utf-8")
+    values = {
+        "name": "Eunji Kim",
+        "stars": format(stats["stars"], ","),
+        "commits": format(stats["commits"], ","),
+        "lines_changed": format(stats["lines_changed"], ","),
+        "repos": format(stats["repositories_with_contributions"], ","),
     }
-    fragments = []
-    for i, (icon, label, value) in enumerate(rows):
-        y = 78 + i * 27
-        fragments.append(
-            '<g transform="translate(24,{})" fill="none" stroke="#9680be" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">{}</g>'.format(y - 12, icons[icon])
-            + '<text x="49" y="{}" class="label">{}</text>'.format(y, html.escape(label))
-            + '<text x="370" y="{}" text-anchor="end" class="value">{:,}</text>'.format(y, value)
+    for key, value in values.items():
+        output = output.replace("{{ " + key + " }}", html.escape(value))
+    return output
+
+
+def render_languages(stats):
+    template = (Path(__file__).resolve().parent / "stats-templates" / "languages.svg").read_text(encoding="utf-8")
+    languages = sorted(stats["languages"].items(), key=lambda item: item[1]["size"], reverse=True)
+    if len(languages) > 7:
+        remaining = sum(item["size"] for _, item in languages[6:])
+        languages = languages[:6] + [("Other", {"size": remaining, "color": "#8b8b8b"})]
+    total = sum(item["size"] for _, item in languages)
+    progress, legend = [], []
+    for index, (name, item) in enumerate(languages):
+        proportion = 100 * item["size"] / total if total else 0
+        color = html.escape(item["color"] or "#8b8b8b", quote=True)
+        ratio = 1 if index == len(languages) - 1 else (0.99 if proportion > 50 else 0.98)
+        progress.append('<span class="progress-item" style="background-color:{};width:{:.3f}%;margin-right:{:.3f}%;"></span>'.format(color, ratio * proportion, (1 - ratio) * proportion))
+        legend.append(
+            '<li style="animation-delay:{}ms;">'.format(index * 150)
+            + '<svg xmlns="http://www.w3.org/2000/svg" class="octicon" style="fill:{};" viewBox="0 0 16 16" width="16" height="16"><path d="M8 4a4 4 0 100 8 4 4 0 000-8z"/></svg>'.format(color)
+            + '<span class="lang">{}</span><span class="percent">{:.2f}%</span></li>'.format(html.escape(name), proportion)
         )
-    description = "; ".join("{}: {:,}".format(label, value) for _, label, value in rows)
-    return '''<svg xmlns="http://www.w3.org/2000/svg" width="400" height="220" viewBox="0 0 400 220" role="img" aria-labelledby="title description">
-<title id="title">Eunji Kim's GitHub Statistics</title>
-<desc id="description">''' + html.escape(description) + '''. Public repositories, default branches only. Lines changed exclude merges.</desc>
-<style>
-text{font-family:'Segoe UI',Ubuntu,Helvetica,Arial,sans-serif}
-.heading{font-size:18px;font-weight:600;fill:#75628f}
-.label{font-size:12px;font-weight:600;fill:#8b8b8b}
-.value{font-size:13px;font-weight:600;fill:#8b8b8b}
-.note{font-size:10px;fill:#8b8b8b}
-@media(prefers-color-scheme:dark){.heading{fill:#c2abe3}.label,.value,.note{fill:#b6b2be}}
-</style>
-<rect x=".5" y=".5" width="399" height="219" rx="6" fill="none" stroke="#b4a4ce" stroke-opacity=".35"/>
-<text x="24" y="37" class="heading">GitHub Statistics</text>
-''' + "\n".join(fragments) + '''
-<text x="24" y="202" class="note">Public repositories · Default branches · All time</text>
-</svg>
-'''
+    if not languages:
+        legend.append('<li style="transform:none;"><span class="lang">No public language data yet</span></li>')
+    return template.replace("{{ progress }}", "".join(progress)).replace("{{ lang_list }}", "\n".join(legend))
 
 
 if __name__ == "__main__":
@@ -150,4 +152,5 @@ if __name__ == "__main__":
     output = Path(__file__).resolve().parents[1] / "assets" / "github-statistics.svg"
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(render(data), encoding="utf-8")
+    (output.parent / "github-languages.svg").write_text(render_languages(data), encoding="utf-8")
     print(json.dumps(data))
