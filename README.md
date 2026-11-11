@@ -34,9 +34,11 @@
 <h2 align="center">📊 GitHub Activity</h2>
 
 <p align="center">
-  <a href="https://github.com/Sagwatteok"><img src="https://github-stats-extended.vercel.app/api?username=Sagwatteok&amp;show_icons=true&amp;hide_rank=true&amp;theme=transparent&amp;title_color=75628F&amp;icon_color=9680BE&amp;text_color=8B8B8B&amp;border_color=E7E0F3&amp;custom_title=GitHub%20Statistics&amp;card_width=360&amp;disable_animations=true" width="47%" align="top" alt="Eunji Kim’s GitHub Statistics" /></a>
+  <a href="https://github.com/Sagwatteok"><img src="./assets/github-statistics.svg" width="47%" align="top" alt="Eunji Kim’s GitHub Statistics" /></a>
   &nbsp;
-  <a href="https://github.com/Sagwatteok?tab=repositories"><img src="https://github-stats-extended.vercel.app/api/top-langs/?username=Sagwatteok&amp;layout=compact&amp;langs_count=6&amp;theme=transparent&amp;title_color=75628F&amp;text_color=8B8B8B&amp;border_color=E7E0F3&amp;custom_title=Most%20Used%20Languages&amp;card_width=360&amp;disable_animations=true" width="47%" align="top" alt="Eunji Kim’s Most Used Languages" /></a>
+  <a href="https://github.com/Sagwatteok?tab=repositories"><img src="./assets/github-languages.svg" width="47%" align="top" alt="Eunji Kim’s Most Used Languages" /></a>
 </p>
+
+<p align="center"><sub>공개 저장소 기준 · 매일 자동 갱신</sub></p>
 
 <br />
