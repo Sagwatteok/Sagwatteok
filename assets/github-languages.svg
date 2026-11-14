@@ -99,16 +99,16 @@ div.ellipsis {
 
 <div>
 <span class="progress">
-<span class="progress-item" style="background-color:#b07219;width:45.355%;margin-right:0.926%;"></span><span class="progress-item" style="background-color:#f1e05a;width:29.688%;margin-right:0.606%;"></span><span class="progress-item" style="background-color:#663399;width:19.121%;margin-right:0.390%;"></span><span class="progress-item" style="background-color:#3572A5;width:3.915%;margin-right:0.000%;"></span>
+<span class="progress-item" style="background-color:#b07219;width:49.566%;margin-right:0.501%;"></span><span class="progress-item" style="background-color:#f1e05a;width:27.916%;margin-right:0.570%;"></span><span class="progress-item" style="background-color:#663399;width:17.505%;margin-right:0.357%;"></span><span class="progress-item" style="background-color:#3572A5;width:3.584%;margin-right:0.000%;"></span>
 </span>
 </div>
 
 <ul>
 
-<li style="animation-delay:0ms;"><svg xmlns="http://www.w3.org/2000/svg" class="octicon" style="fill:#b07219;" viewBox="0 0 16 16" width="16" height="16"><path d="M8 4a4 4 0 100 8 4 4 0 000-8z"/></svg><span class="lang">Java</span><span class="percent">46.28%</span></li>
-<li style="animation-delay:150ms;"><svg xmlns="http://www.w3.org/2000/svg" class="octicon" style="fill:#f1e05a;" viewBox="0 0 16 16" width="16" height="16"><path d="M8 4a4 4 0 100 8 4 4 0 000-8z"/></svg><span class="lang">JavaScript</span><span class="percent">30.29%</span></li>
-<li style="animation-delay:300ms;"><svg xmlns="http://www.w3.org/2000/svg" class="octicon" style="fill:#663399;" viewBox="0 0 16 16" width="16" height="16"><path d="M8 4a4 4 0 100 8 4 4 0 000-8z"/></svg><span class="lang">CSS</span><span class="percent">19.51%</span></li>
-<li style="animation-delay:450ms;"><svg xmlns="http://www.w3.org/2000/svg" class="octicon" style="fill:#3572A5;" viewBox="0 0 16 16" width="16" height="16"><path d="M8 4a4 4 0 100 8 4 4 0 000-8z"/></svg><span class="lang">Python</span><span class="percent">3.91%</span></li>
+<li style="animation-delay:0ms;"><svg xmlns="http://www.w3.org/2000/svg" class="octicon" style="fill:#b07219;" viewBox="0 0 16 16" width="16" height="16"><path d="M8 4a4 4 0 100 8 4 4 0 000-8z"/></svg><span class="lang">Java</span><span class="percent">50.07%</span></li>
+<li style="animation-delay:150ms;"><svg xmlns="http://www.w3.org/2000/svg" class="octicon" style="fill:#f1e05a;" viewBox="0 0 16 16" width="16" height="16"><path d="M8 4a4 4 0 100 8 4 4 0 000-8z"/></svg><span class="lang">JavaScript</span><span class="percent">28.49%</span></li>
+<li style="animation-delay:300ms;"><svg xmlns="http://www.w3.org/2000/svg" class="octicon" style="fill:#663399;" viewBox="0 0 16 16" width="16" height="16"><path d="M8 4a4 4 0 100 8 4 4 0 000-8z"/></svg><span class="lang">CSS</span><span class="percent">17.86%</span></li>
+<li style="animation-delay:450ms;"><svg xmlns="http://www.w3.org/2000/svg" class="octicon" style="fill:#3572A5;" viewBox="0 0 16 16" width="16" height="16"><path d="M8 4a4 4 0 100 8 4 4 0 000-8z"/></svg><span class="lang">Python</span><span class="percent">3.58%</span></li>
 
 </ul>
 
